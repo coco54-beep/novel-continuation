@@ -16,37 +16,23 @@
 分析时先**归类叙事范式**：对照 `references/style_library.md`（文风示例库）的总览表与本作特征，判断本作属于史诗全景/章回说书/章回武侠/现实厚重/克制白描/诗意抒情/悬疑第一人称/黑道纪实/暖心随笔/古风玄幻/半文白言情/古典雅致/硬科幻 中的一类或多类，并把该范式的「可复刻要点」「具体抓手」「高频踩坑点」写入 `style_profile.json` 的对应字段（尤其 `emotional_rhythm` / `emotion_presentation` / `catchphrases` 要与踩坑点联动），供续写时规避。
 
 ## 输出
+
+落盘文件 `style_profile.json` 的键名**严格以 `schemas/style_profile.schema.json` 的 properties 与脚手架 `scripts/build_style_profile.py` 生成的结构为准**（即 `schema_version/project_id/paradigm/density_tier/perspective/voice/sentence_rhythm/emotion_presentation/dialogue_ratio/description_style/cultural_references/material_details/catchphrases/pitfalls/style_metrics/notes`）。下面的 JSON 只是便于阅读的示意，不是键名依据；填脚手架时不要另造键（如不要写 `narrative_person/point_of_view_scope/avg_sentence_length` 等旧示例键）。
+
 ```json
 {
-  "narrative_person": "第三人称",
-  "point_of_view_scope": "限知(以主角视角)",
-  "avg_sentence_length": "短句为主",
-  "sentence_mix": "长短句约 3:1",
-  "dialogue_ratio": 0.35,
-  "mental_description_ratio": 0.2,
-  "environment_description_ratio": 0.2,
-  "action_density": 0.25,
-  "metaphor_density": "较高",
-  "sensory_preference": ["视听", "触感"],
-  "high_frequency_imagery": ["雨", "旧物件", "霓虹"],
-  "transition_style": "硬切为主，少量留白",
-  "chapter_hook": "多以悬念句收尾",
-  "pacing": "中速，张弛交替",
-  "restraint": "克制",
-  "poetic_degree": "中等",
-  "colloquial_degree": "高",
-
-  "cultural_reference_density": "极高",
-  "cultural_references": [
-    {"source": "游戏/动漫/电影", "items": ["星际争霸的母巢/大和炮/机枪兵", "Wall-E 的 Eve", "黑客帝国 Neo", "日漫白金之星"]}
-  ],
-  "material_details": [
-    "高仿万宝龙表", "N96 手机", "红点(IBM 红帽)打星际", "泽太子绰号",
-    "寂寞的贪吃蛇笔名", "采蒲公英付告白", "蹭报刊亭看杂志"
-  ],
-  "emotional_rhythm": "悲喜突变，几句话内从憋屈跳到爆发",
-  "emotion_presentation": "用具体事件承载情绪(如被当字母'e'、递花被忽略)，不用形容词旁白；难堪时保留冷场不急着化解；文化梗是角色当下自然联想而非硬排比喻",
-  "catchphrases": ["我有一个偶尔会发疯的人呐", "别是三年三年又三年", "啊呸呸呸"]
+  "paradigm": "古典雅致 / 家族兴衰(可叠章回说书、半文白)",
+  "perspective": "第三人称全知为主，叙述者在话本评点腔与人物限知间滑移",
+  "voice": "半文半白的雅白话，评点式叙述、市井口吻与诗性书面语杂糅",
+  "sentence_rhythm": "疏朗长句为骨，长短离合，情绪处可转短句急收",
+  "emotion_presentation": "用事件/物件/诗句承载情绪，写到垂泪低头即收，不直说不补金句",
+  "dialogue_ratio": "对白偏多且言语有机锋，口吻随身份等级分层",
+  "description_style": "白描为主，服饰器物、岁时节令细节可考，兼用诗词判词式写景",
+  "cultural_references": ["女娲补天神话(出处)", "太虚幻境判词判曲(出处)", "僧道谶语(出处)"],
+  "material_details": ["通灵玉铭文(出处)", "冷香丸海上仙方(出处)", "某器物风波(出处)"],
+  "catchphrases": ["某角色口头禅(出处)"],
+  "pitfalls": ["用现代白话破坏语感", "把古白话对白写成文言", "句子平均化缺少跌宕", "形容词直说情绪而非借物呈现"],
+  "notes": "范式归类依据与可复刻要点；不承诺复制某位作者"
 }
 ```
 

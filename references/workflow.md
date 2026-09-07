@@ -21,6 +21,8 @@ python scripts/init_project.py --name my_novel --output ./projects/my_novel
 
 **状态机**：`created → imported → split → analyzing → analyzed → planning → planned → writing → reviewing → completed`。
 
+**状态推进**：每完成一个阶段，用 `scripts/set_status.py --project ./projects/<id> --status <state>` 登记 `project.json#status`（不要手工改 JSON）。脚本推进到的中间状态：导入/切分/探知类脚本会自动置 `split`；其后的 analyze→`analyzed`、结局/大纲→`planning`/`planned`、正文→`writing`/`reviewing`、确认收尾→`completed` 由本脚本完成。
+
 ---
 
 ## 阶段二：导入小说
@@ -104,9 +106,11 @@ python scripts/analyze_density.py --project ./projects/my_novel
 
 ## 阶段五：建立故事档案
 
-所有章节分析完成后，汇总生成 `story_bible/` 下的：characters / relationships / events / timeline / locations / factions / items / world_rules / knowledge / foreshadowing。
+所有章节分析完成后，按 `prompts/build_story_bible.md` 汇总生成 `story_bible/` 下的：characters / relationships / events / timeline / locations / factions / items / world_rules / knowledge / foreshadowing。
 
-**必须处理人物别名**（如 林舟 / 小舟 / 林先生 / 队长）。若不能确定是否为同一人物，保存为待确认候选，不得直接合并低置信度人物：
+**键名铁律**：字段名一律以 `schemas/` 对应 schema 的 `properties` 为准，禁止为同一字段造别名键（如 `relation_id` 与 `relationship_id` 并存），否则数据会被污染（实测教训）。可选字段无内容就省略键，尤其 `foreshadowing.recommended_resolution_range` 回次未知时不要写 `[]`。
+
+**必须处理人物别名**（如 林舟 / 小舟 / 林先生 / 队长），用 `prompts/merge_characters.md`。若不能确定是否为同一人物，保存为待确认候选，不得直接合并低置信度人物：
 
 ```json
 {
@@ -116,6 +120,16 @@ python scripts/analyze_density.py --project ./projects/my_novel
   "status": "pending_user_confirmation"
 }
 ```
+
+**完成后校验**（`--items` 对数组逐元素校验，见 `scripts/validate_json.py`）：
+```bash
+python scripts/validate_json.py --schema schemas/character.schema.json --input projects/<id>/story_bible/characters.json --items
+python scripts/validate_json.py --schema schemas/relationship.schema.json --input projects/<id>/story_bible/relationships.json --items
+python scripts/validate_json.py --schema schemas/event.schema.json --input projects/<id>/story_bible/events.json --items
+python scripts/validate_json.py --schema schemas/knowledge.schema.json --input projects/<id>/story_bible/knowledge.json --items
+python scripts/validate_json.py --schema schemas/foreshadowing.schema.json --input projects/<id>/story_bible/foreshadowing.json --items
+```
+校验失败必须修正，不得跳过。
 
 ---
 
@@ -146,6 +160,16 @@ opening | development | midpoint | escalation | pre_climax | climax | resolution
 - **续写总纲** `planning/story_outline.json`：核心主题、最终结局、剩余主线、人物弧线、最终冲突、伏笔回收顺序、关键转折点。
 - **分卷大纲** `planning/volume_outlines.json`：卷名、起止章节、阶段目标、核心冲突、关键转折、人物变化、卷末状态。
 - **章节大纲** `planning/chapter_outlines.json`：章节编号、名称、目标、出场人物、时间地点、核心事件、事件因果、人物心理变化、人物关系变化、信息增量、伏笔操作、环境特征、语言与节奏、章末钩子、目标字数。
+
+---
+
+## 批量产物落盘纪律（阶段八/九 适用）
+
+一旦单次要产出大批量 JSON（如一次规划 10+ 章章纲、给某卷逐章出场景卡），**不要先在上下文里排完整套再一次性落盘**：
+
+1. 分成若干小批，各写临时文件（如 `planning/_chapters_a.json`），主进程再合并成正式文件；
+2. 长产物「先写盘、再汇报」，写完一批立即确认落盘，避免上下文超限导致整批静默丢失（实测：一次性产出 10 章章纲的子智能体多次空返回且零落盘）；
+3. 阶段十「按剧情单元分段生成再拼接」的超长正文策略，与章纲/场景卡遵循同一逻辑。
 
 ---
 
@@ -187,7 +211,7 @@ opening | development | midpoint | escalation | pre_climax | climax | resolution
 
 ### 超长章节：按剧情单元分段生成
 
-当单章目标字数（`target_chapter_length`，或某章的实际规划长度）**明显超过模型合理单次输出的上限**（如古典章回体/史诗型小说的单回常在 5000 字以上，部分长篇甚至可达一万至数万字）时，**不要一次生成整章**，而应按剧情单元拆分、逐段生成、最后拼接。这是经 21 部全类型测试后沉淀的硬性策略（超长回目若一次生成，要么超时、要么被迫大幅收敛，导致篇幅与密度普遍偏薄，成为该类作品最主要的失分点）。
+当单章目标字数（`target_chapter_length`，或某章的实际规划长度）**明显超过模型合理单次输出的上限**（如古典章回体/史诗型小说的单回常在 5000 字以上，金庸、水浒、白鹿原甚至可达一万至数万字）时，**不要一次生成整章**，而应按剧情单元拆分、逐段生成、最后拼接。这是经 21 部全类型测试后沉淀的硬性策略（《射雕》《神雕》《天龙》《水浒》《白鹿原》等超长回目若一次生成，要么超时、要么被迫大幅收敛，导致篇幅与密度普遍偏薄，成为该类作品最主要的失分点）。
 
 **分段规则**：
 1. **切分依据**：按场景卡的自然剧情单元切，而非机械按字数均摊。一个"生成块"应是一段完整的情节（如一场打斗、一次夜谈、一段回忆、一个地点转移），有清晰的起承转合与可衔接的边界。
@@ -195,7 +219,7 @@ opening | development | midpoint | escalation | pre_climax | climax | resolution
 3. **逐段生成**：每段复用 `prompts/write_scene.md`，上下文只装配与该段相关的最小集（本段场景卡 + 相关人物状态/知识边界 + 上一段结尾一句 + 风格指纹 + 必要伏笔），**不要每次重读整章、整部小说**，避免上下文膨胀与超时。
 4. **段间衔接**：每段结尾落在本段结果上，留好与下一段的钩子；下一段开头自然承接上一段结尾的人物状态与场景。
 5. **拼接成章**：按顺序把各段正文写入 `chapters/generated/{chapter_id}/draft_v1.md`。**生成后不能立即标记为正式章节**，仍需走一致性检查与修订。
-6. **保留余地**：若某段是对原作风格有决定性影响的关键场景（如古典说书体的辞赋铺陈、新派武侠的打斗工笔），宁可让该段略长、不强行削短，以保住文风与密度——篇幅是结果而非目标。
+6. **保留余地**：若某段是对原作风格有决定性影响的关键场景（如《水浒》的辞赋铺陈、《金庸》的打斗工笔），宁可让该段略长、不强行削短，以保住文风与密度——篇幅是结果而非目标。
 
 ---
 

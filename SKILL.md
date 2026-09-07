@@ -56,8 +56,8 @@ novel-continuation/
 ├─ LICENSE
 ├─ requirements.txt
 ├─ scripts/          确定性处理脚本 (初始化/导入/切分/校验/状态/搜索/导出/篇幅探知/密度探知/风格评分)
-├─ references/       方法论文档 (工作流/分析维度/状态规则/上下文/一致性/文风/文风范式库/版权/输出规范)
-├─ schemas/          13 个 JSON Schema 契约
+├─ references/       方法论文档 (workflow/analysis_dimensions/story_state_rules/context_selection/consistency_rules/style_rules/style_library/style_samples/copyright_rules/output_conventions)
+├─ schemas/          14 个 JSON Schema 契约
 ├─ templates/        9 个 JSON 模板
 ├─ prompts/          提示词模板 (标准流程 + 轻量模式，见 prompts/)
 └─ tests/            自动化测试与 Fixtures
@@ -126,7 +126,7 @@ projects/<project_id>/
 | 自动探知篇幅 | `scripts/estimate_chapter_length.py` | `indexes/length_stats.json` + `project.json#target_chapter_length` |
 | 自动探知密度 | `scripts/analyze_density.py` | `indexes/density_stats.json` + `project.json#density_tier` |
 | 逐章分析 | `prompts/analyze_chapter.md` | `analysis/chapters/*.json` |
-| 建立故事档案 | `prompts/merge_characters.md` 等 | `story_bible/*.json` |
+| 建立故事档案 | `prompts/build_story_bible.md`(建档) + `merge_characters.md`(别名) | `story_bible/*.json`(数组容器, 用 `validate_json.py --items` 逐元素校验) |
 | 分析故事阶段 | `prompts/build_story_summary.md` | `analysis/current_stage.json` |
 | 生成结局方案 | `prompts/propose_endings.md` | `planning/ending_proposals.json` |
 | 生成续写大纲 | `prompts/generate_*.md` | `planning/story_outline.json` 等 |
@@ -203,7 +203,7 @@ rejected         用户否定
 
 每章生成后必须检查，见 `references/consistency_rules.md`：
 
-1. **人物一致性**——性格漂移、行动动机、语言契合、情绪铺垫、能力超限、是否做出明确不会做的事；
+1. **人物一致性**——性格漂移、行动动机、语言契合、情绪铺垫、能力超限、是否做出明确不会做的事、**称呼/辈分是否与 `relationships.json` 关系档案一致**（审查必须读取关系档案）；
 2. **知识边界**——是否知道不该知道的信息、是否遗忘已知信息、秘密是否无理由传播、误解是否被当事实；
 3. **时间与空间**——时间顺序、能否及时到达、是否同时在多地、昼夜日期合理性；
 4. **世界规则**——能力规则、道具归属、社会/科技/魔法规则、新设定铺垫；

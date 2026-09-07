@@ -9,6 +9,7 @@
 - 场景卡：{scene_cards}
 - 当前故事状态：{current_state}
 - 相关人物档案：{characters}
+- 人物关系档案：{relationships}   ← 必须读取, 用于核对称呼/辈分是否与世系一致(见 references/consistency_rules.md 第1类)
 - 知识边界：{knowledge_boundary}
 - 本章伏笔：{foreshadowing}
 - 全书风格指纹：{style_profile}

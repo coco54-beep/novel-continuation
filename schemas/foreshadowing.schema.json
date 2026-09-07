@@ -21,8 +21,9 @@
     "recommended_resolution_range": {
       "type": "array",
       "items": { "type": "string", "pattern": "^\\d{4}$" },
-      "minItems": 2,
-      "maxItems": 2
+      "minItems": 0,
+      "maxItems": 2,
+      "description": "可选。推荐回收回次区间(起/止两个4位回次)。回次未知或已回收时省略该键，不要写空数组占位"
     }
   }
 }

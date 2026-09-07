@@ -40,3 +40,27 @@ def test_validate_missing_schema(tmp_path):
     rc, out, err = run_script("validate_json.py", "--schema", str(tmp_path / "nope.json"),
                               "--input", str(tmp_path / "x.json"))
     assert rc == 1
+
+
+def test_validate_items_mode(tmp_path):
+    """--items: 容器数组逐元素校验, 有一个坏元素即失败并指出其下标。"""
+    schema = _schema("character.schema.json")
+    good = {"character_id": "char_a", "name": "甲", "source_status": "confirmed",
+            "identity": "x", "behavior_profile": {}, "speech_profile": {},
+            "current_state": {}}
+    bad = {"character_id": 123}  # 类型与必填都错
+    arr = os.path.join(str(tmp_path), "chars.json")
+    with open(arr, "w", encoding="utf-8") as f:
+        json.dump([good, bad, good], f)
+
+    rc, out, err = run_script("validate_json.py", "--schema", schema, "--input", arr, "--items")
+    assert rc == 1
+    assert "[1]" in out, out  # 出错下标指向第 2 个元素
+
+    arr_ok = os.path.join(str(tmp_path), "chars_ok.json")
+    with open(arr_ok, "w", encoding="utf-8") as f:
+        json.dump([good, good], f)
+    rc_ok, out_ok, err_ok = run_script(
+        "validate_json.py", "--schema", schema, "--input", arr_ok, "--items")
+    assert rc_ok == 0, f"{out_ok}\n{err_ok}"
+
