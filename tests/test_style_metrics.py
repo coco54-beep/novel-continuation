@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.join(SKILL_DIR, "scripts"))
 
 from style_metrics import (
     classify_density,
+    compute_cliche_hits,
     compute_dialogue_ratio,
     compute_metrics,
     compute_reduplication,
@@ -47,3 +48,16 @@ def test_classify_density_tiers():
 
 def test_compute_metrics_empty():
     assert "error" in compute_metrics("   ")
+
+
+def test_metrics_include_layered_and_cliche():
+    plain = "他走进屋，坐下，端起碗喝了一口水。"
+    ai = "那一刻，他目光深邃，嘴角勾起一抹笑意，仿佛命运的齿轮开始转动。"
+    m_plain = compute_metrics(plain)
+    m_ai = compute_metrics(ai)
+    for key in ("emotion_markers_per_1k", "turnword_per_1k", "affective_adj_ratio",
+                "cliche_per_1k", "cliche_hits"):
+        assert key in m_plain
+    # AI腔样本应命中更多套话雷区
+    assert compute_cliche_hits(ai) > compute_cliche_hits(plain)
+    assert m_ai["cliche_hits"] > m_plain["cliche_hits"]

@@ -100,7 +100,7 @@ def test_split_chapters_dedupes_adjacent_repeat_title(tmp_path):
 
 def test_split_chapters_weak_signal_not_used_when_strong_found(tmp_path):
     """存在方括号强信号标题时, 正文里的 '一、二、' 分点句不应被弱信号误判为章节。
-    这正是《白鹿原》类真实文本曾出现的 bug: 方括号标题 + 正文分点句导致切分碎片化。"""
+    这正是某乡土史诗长篇类真实文本曾出现的 bug: 方括号标题 + 正文分点句导致切分碎片化。"""
     proj = str(tmp_path / "nov")
     run_script("init_project.py", "--name", "nov", "--output", proj)
     src = os.path.join(proj, "source", "original.txt")
@@ -143,18 +143,18 @@ def test_split_chapters_weak_signal_fallback_no_strong(tmp_path):
 
 def test_split_chapters_body_line_starting_zhenghui_not_title(tmp_path):
     """章回体正文常以 '第四回中已将……' 这类长句开头, 不应被 '第X回' 强信号误判为标题。
-    这正是《红楼梦》切分失真的 bug: 正文一整段被当作下一个章节标题(曾造成 0 字章)。"""
+    这正是某章回体书目切分失真的 bug: 正文一整段被当作下一个章节标题(曾造成 0 字章)。"""
     proj = str(tmp_path / "nov")
     run_script("init_project.py", "--name", "nov", "--output", proj)
     src = os.path.join(proj, "source", "original.txt")
     os.makedirs(os.path.dirname(src), exist_ok=True)
-    body = "第四回中已将薛家母子在荣府中寄居等事略已表明，此回暂可不写了。如今且说林黛玉自在荣府以来，贾母万般怜爱。" * 6
+    body = "第五回里已把那家母子寄居的事说罢，这一回可少写些了。眼下只说那户人家的女儿，自进得门来，老太太百般疼爱，姊妹们也都处处让她。" * 6
     with open(src, "w", encoding="utf-8") as f:
         f.write("[第1回 风月]\n" + body + "\n\n[第2回 故人]\n第二回正文。")
     rc, out, err = run_script("split_chapters.py", "--project", proj)
     assert rc == 0, err
     manifest = json.load(open(os.path.join(proj, "indexes", "chapter_manifest.json"), encoding="utf-8"))
-    # 只应有两个方括号标题章节, 且第1章正文应包含那段"第四回中"开头的内容
+    # 只应有两个方括号标题章节, 且第1章正文应包含那段"第五回里"开头的内容
     assert len(manifest) == 2
     assert manifest[0]["title"] == "[第1回 风月]"
     assert manifest[1]["title"] == "[第2回 故人]"

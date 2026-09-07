@@ -25,6 +25,26 @@ DIALECT_WORDS = [
     "没得", "莫", "晓得", "劳什子", "孽障", "豁出去了",
 ]
 
+# 情绪/感叹标记(用于"情绪张力"密度, 值越大情绪越外露/越浓)
+EMOTION_MARKERS = ["！", "……", "唉", "啊", "呀", "痛", "泪", "心", "哭", "疼", "怒", "恨"]
+
+# 转折/承接词(用于叙事节奏曲折密度, 值越大转折越频繁)
+TURNWORDS = ["但", "却", "然而", "忽然", "于是", "可", "偏偏", "谁知", "猛地", "陡然", "不料", "竟"]
+
+# 情感形容词(用于"抒情/文采"浓度判断, 值越大越偏书面抒情)
+AFFECTIVE_ADJECTIVES = [
+    "凄", "悲", "伤", "苍凉", "落寞", "寂寥", "孤", "委顿", "潸然", "斑斓", "缱绻",
+    "旖旎", "温存", "嶙峋", "泓", "潋滟", "迷离", "恍惚", "怅然", "惘然",
+]
+
+# AI腔 / 爽文套话(用于"反动漫决"雷区检测; 命中越多越"AI/套路", 非原作文气)
+CLICHE_WORDS = [
+    "那一刻", "心里一沉", "说不出话来", "无言", "愿世间", "眼眶红了", "缓缓地",
+    "目光深邃", "嘴角勾起", "眸子", "微微一怔", "深吸一口气", "整个世界仿佛", "宿命",
+    "注定", "岁月静好", "泪流满面", "暖流", "心跳漏了一拍", "命运的齿轮", "如约而至",
+    "怦然", "蓦然回首", "意味深长", "久久无法平静",
+]
+
 
 def strip_space(text: str) -> str:
     """去空白得到"实际正文字符串"(不含换行/空格)。"""
@@ -101,6 +121,47 @@ def compute_overlap_bigram_ratio(text: str) -> float:
     return sum(top) / total
 
 
+def compute_emotion_per_1k(text: str) -> float:
+    """情绪张力密度: 感叹/省略号 + 强烈情绪词, 每千字计数。"""
+    body = strip_space(text)
+    if not body:
+        return 0.0
+    n = sum(body.count(m) for m in EMOTION_MARKERS)
+    return round(n / len(body) * 1000, 3)
+
+
+def compute_turnword_per_1k(text: str) -> float:
+    """叙事转折/承接词密度: 每千字计数, 值越大情节转折越密。"""
+    body = strip_space(text)
+    if not body:
+        return 0.0
+    n = sum(body.count(w) for w in TURNWORDS)
+    return round(n / len(body) * 1000, 3)
+
+
+def compute_affective_adj_ratio(text: str) -> float:
+    """抒情/文采浓度: 情感形容词命中字数 / 总字数。"""
+    body = strip_space(text)
+    if not body:
+        return 0.0
+    n = sum(body.count(a) for a in AFFECTIVE_ADJECTIVES)
+    return round(n / len(body), 4)
+
+
+def compute_cliche_hits(text: str) -> int:
+    """AI腔/爽文套话命中次数(反动漫决雷区)。"""
+    body = strip_space(text)
+    return sum(body.count(w) for w in CLICHE_WORDS)
+
+
+def compute_cliche_per_1k(text: str) -> float:
+    """AI腔/套话密度: 每千字命中数。"""
+    body = strip_space(text)
+    if not body:
+        return 0.0
+    return round(compute_cliche_hits(text) / len(body) * 1000, 3)
+
+
 def compute_para(text: str) -> tuple:
     """返回 (平均段落字数, 每千字段落数)。"""
     paras = [re.sub(r"\s+", "", p) for p in re.split(r"\n+", text) if p.strip()]
@@ -135,6 +196,11 @@ def compute_metrics(text: str) -> dict:
         "reduplication_per_1k": round(compute_reduplication(text) / total * 1000, 3),
         "avg_para_len": avg_para_len,
         "para_per_1k": para_per_1k,
+        "emotion_markers_per_1k": compute_emotion_per_1k(text),
+        "turnword_per_1k": compute_turnword_per_1k(text),
+        "affective_adj_ratio": compute_affective_adj_ratio(text),
+        "cliche_per_1k": compute_cliche_per_1k(text),
+        "cliche_hits": compute_cliche_hits(text),
     }
 
 
