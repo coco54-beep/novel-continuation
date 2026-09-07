@@ -251,13 +251,23 @@ python scripts/score_style.py --project ./projects/my_novel \
 
 ## 阶段十三：更新故事状态
 
+**前置**：用 `prompts/extract_state_changes.md` 从刚确认的 `final.md` 提取状态变化，写 `state/changes_{chapter_id}.json`（增量语义：按 name/id/item 合并，不整表替换，字段名以 `schemas/story_state.schema.json` 为准）。
+
+**执行**：
 ```bash
-python scripts/update_state.py --project ./projects/my_novel --chapter 0051
+python scripts/update_state.py --project ./projects/my_novel --chapter 0051 \
+    --changes state/changes_0051.json
 ```
 
 更新：人物位置、身体/心理状态、当前目标、掌握信息、误解、关系、道具持有者、势力状态、事件结果、未解决冲突、伏笔状态、世界新增事实。
 
-**更新前创建快照** `state/snapshots/after_0051.json`，再更新 `state/current_state.json`。
+**快照与回滚**：更新前自动创建 `state/snapshots/after_0051.json`（=应用第 0051 章之前的旧状态，即回滚点）。重复更新同一章节会因快照已存在被拒绝。要撤销某章的更新，回到它之前的状态：
+```bash
+python scripts/update_state.py --project ./projects/my_novel --restore 0052
+```
+即用 `after_0052.json` 把 `current_state.json` 恢复为应用第 0052 章之前的时点（≈第 0051 章末）。
+
+**收尾**：状态更新后用 `scripts/set_status.py` 推进状态——若故事未完回到 `writing`（续写下一章），若已完结置 `completed`；最后按需用 `scripts/export_novel.py` 导出（`--mode full|continuation`，只收集 `final.md`）。
 
 ---
 

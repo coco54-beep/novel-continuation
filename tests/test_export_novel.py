@@ -64,3 +64,19 @@ def test_export_zip_does_not_rebundle_itself(built_project):
         names = zf.namelist()
         assert not any(n.endswith(".zip") for n in names)
         assert not any(n.startswith("exports/") for n in names)
+
+
+def test_export_does_not_duplicate_title(built_project):
+    """正文首行若就是章节标题, 导出时标题只出现一次(无 # 前缀的 final.md 也适用)。"""
+    cid = "0004"
+    d = os.path.join(built_project, "chapters", "generated", cid)
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "final.md"), "w", encoding="utf-8") as f:
+        f.write("第十四回 某某某事\n\n这是没有井号标题的续写正文。\n")
+
+    rc, out, err = run_script("export_novel.py", "--project", built_project,
+                              "--mode", "continuation", "--format", "md")
+    assert rc == 0, err
+    text = open(os.path.join(built_project, "exports", "continuation_novel.md"), encoding="utf-8").read()
+    assert text.count("第十四回") == 1, text
+    assert "这是没有井号标题的续写正文" in text

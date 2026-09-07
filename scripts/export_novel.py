@@ -52,6 +52,17 @@ def collect_generated(proj):
     return rows
 
 
+def strip_leading_title(text, title):
+    """若正文首行(非空)就是章节标题, 去掉它, 避免导出时标题重复。"""
+    lines = text.split("\n")
+    for idx, ln in enumerate(lines):
+        if ln.strip() == "":
+            continue
+        norm = ln.strip().lstrip("#").strip()
+        return "\n".join(lines[idx + 1:]).lstrip("\n") if norm == title.strip() else text
+    return text
+
+
 def main():
     ap = argparse.ArgumentParser(description="导出成书")
     ap.add_argument("--project", required=True)
@@ -86,10 +97,11 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(header)
         for order, title, text in body:
+            body_text = strip_leading_title(text, title)
             if args.format == "md":
-                f.write(f"\n## {title}\n\n{text}\n")
+                f.write(f"\n## {title}\n\n{body_text}\n")
             else:
-                f.write(f"\n{title}\n\n{text}\n")
+                f.write(f"\n{title}\n\n{body_text}\n")
 
     # 打包项目(排除 exports 输出目录与自身压缩包, 避免递归膨胀)
     zip_path = os.path.join(out_dir, "project_archive.zip")

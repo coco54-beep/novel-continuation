@@ -33,7 +33,16 @@
 }
 ```
 
+## 合并语义（与 `scripts/update_state.py` 一致, 增量合并非整表替换）
+
+- `characters`：按 `name` 匹配——已存在人物只**覆盖本文件里出现的字段**（其余字段保留），未出现的人物追加；`known_information`/`misconceptions` 只要本文件提供了就**整体覆盖**（想清空误解就写空数组）。不要为没变化的人物重复整卡。
+- `item_owners` 按 `item` 覆盖 `owner`；`foreshadowing_status` 按 `id` 覆盖 `status`。
+- `facts` / `conflicts` / `world_facts`：追加去重（v1 不支持删除纯字符串条目）。
+- 人物死亡/离场等，用该人物的字段表达（如 `physical_condition: "死亡"`），而不是把人物整个删掉。
+- 只写变化项；输出文件存到 `state/changes_{chapter_id}.json`。
+
 ## 要求
 - 只记录**发生变化**的项，不重复已有状态。
 - 信息变化需标注来源章节。
-- 供 `update_state.py` 校验与写入，防止重复应用同一章节。
+- 供 `update_state.py` 校验与写入，防止重复应用同一章节（重复应用会因快照已存在被拒绝）。
+- 字段名严格以 `schemas/story_state.schema.json` 与上方示例为准，不要造新键。
