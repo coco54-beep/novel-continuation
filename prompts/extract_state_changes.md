@@ -16,6 +16,7 @@
   "after_chapter": "0051",
   "characters": [
     {
+      "character_id": "char_lin_zhou",
       "name": "林舟",
       "location": "旧车站仓库",
       "physical_condition": "轻伤",
@@ -36,6 +37,7 @@
 ## 合并语义（与 `scripts/update_state.py` 一致, 增量合并非整表替换）
 
 - `characters`：按 `name` 匹配——已存在人物只**覆盖本文件里出现的字段**（其余字段保留），未出现的人物追加；`known_information`/`misconceptions` 只要本文件提供了就**整体覆盖**（想清空误解就写空数组）。不要为没变化的人物重复整卡。
+- 人物带 `character_id`（对应 `story_bible/characters.json` 的 id）以便跨库对齐；新人物若已建档务必带 id。
 - `item_owners` 按 `item` 覆盖 `owner`；`foreshadowing_status` 按 `id` 覆盖 `status`。
 - `facts` / `conflicts` / `world_facts`：追加去重（v1 不支持删除纯字符串条目）。
 - 人物死亡/离场等，用该人物的字段表达（如 `physical_condition: "死亡"`），而不是把人物整个删掉。

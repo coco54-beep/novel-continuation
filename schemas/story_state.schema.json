@@ -14,6 +14,7 @@
       "items": {
         "type": "object",
         "properties": {
+          "character_id": { "type": "string", "pattern": "^char_", "description": "对应 story_bible/characters.json 的 character_id(可选, 用于跨库对齐)" },
           "name": { "type": "string" },
           "location": { "type": "string" },
           "physical_condition": { "type": "string" },

@@ -105,6 +105,37 @@ python scripts/score_style.py --project ./projects/my_novel \
 
 详细规则见 `references/workflow.md` 阶段十。
 
+### 一致性复检门（draft → final 的硬约束）
+
+只有最新一份一致性报告 `decision = approved`（或用户 `--force` 强确认）才允许生成 `final.md`：
+
+```bash
+# 可选: 把 score_style 的定量分并入 review_report(语言风格量化佐证)
+python scripts/attach_style_score.py --project ./projects/my_novel \
+  --review reviews/0013_v1.json --metrics reviews/style_metrics_0013.json
+
+# 复检门: 最新 review 为 approved 才放行
+python scripts/promote_chapter.py --project ./projects/my_novel --chapter 0013
+python scripts/promote_chapter.py --project ./projects/my_novel --chapter 0013 --force  # 用户强确认
+```
+
+### 脚本速查（诊断 / 维护）
+
+```bash
+python scripts/project_status.py --project ./projects/my_novel      # 进度 + 下一步建议 + 一致性告警
+python scripts/build_manifest.py   --project ./projects/my_novel    # 手工改原文章节后重建清单
+python scripts/compare_versions.py --project ./projects/my_novel --chapter 0013  # draft/revised/final 差异
+python scripts/set_status.py --project ./projects/my_novel --status planned      # 推进状态机
+python scripts/update_state.py --project ./projects/my_novel --restore 0052      # 撤销某章状态更新
+python scripts/validate_json.py --schema schemas/character.schema.json \
+    --input projects/my_novel/story_bible/characters.json --items               # 数组容器逐元素校验
+python scripts/init_project.py --name my_novel --output ./projects/my_novel      # 建项目(含状态基线)
+```
+
+### 排查：技能未被模型加载
+
+若调用时模型"看不到"本技能：确认 `SKILL.md` 位于技能加载路径（opencode：`~/.config/opencode/skill(s)/novel-continuation/` 或项目 `.opencode/skill(s)/`；其它 Agent 工具按其加载目录），`name` 与文件夹名一致、`description` 含触发关键词，然后**重启 Agent 工具**（配置只启动时加载一次）。
+
 ## 目录结构
 
 ```
@@ -141,6 +172,6 @@ novel-continuation/
 
 - 工作流细节：`references/workflow.md`
 - 文风范式库：`references/style_library.md`（多类型小说可复刻文风要点与高频踩坑点，续写/一致性检查时对照）
-- 能力参照与复测基准：`tests/benchmark_novels.md`（21 部全类型小说的范式归类、得分与复测方法；含合规演示样本 `tests/fixtures/style_samples.txt`）
+- 能力对照与复测：`tests/fixtures/style_samples.txt`（合规演示样本）；另有一份含版权书摘的本地评测基准 `tests/benchmark_novels.md`，**不在公开仓库内**
 - 所有数据契约：`schemas/`
 - 所有提示词：`prompts/`

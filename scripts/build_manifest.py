@@ -22,6 +22,24 @@ def strip_title(title):
     return re.sub(r"^\s*#+\s*", "", title).strip()
 
 
+_TITLE_RE = [
+    re.compile(r"^\[[^\[\]]{1,80}\]$"),                       # [第一章] / [第1回 …]
+    re.compile(r"^第[零一二三四五六七八九十百千万两0-9]+[章节卷回部].*$"),
+    re.compile(r"^[一二三四五六七八九十]+、"),                  # 一、二、…
+    re.compile(r"^\d{1,3}[、\.．]\s*\S+"),                     # 1、1. 1．
+    re.compile(r"^Chapter\s+\d+.*$", re.IGNORECASE),
+]
+
+
+def looks_like_title(line):
+    line = line.strip()
+    if not line:
+        return False
+    if line.startswith("#"):
+        return True
+    return any(r.match(line) for r in _TITLE_RE)
+
+
 def main():
     ap = argparse.ArgumentParser(description="重建章节清单")
     ap.add_argument("--project", required=True)
@@ -43,14 +61,17 @@ def main():
         cid = fname[:4]
         with open(os.path.join(orig_dir, fname), encoding="utf-8") as f:
             content = f.read()
-        # 去掉首行 # 标题
         lines = content.split("\n")
-        if lines and lines[0].startswith("#"):
-            title = strip_title(lines[0])
-            body = "\n".join(lines[1:]).strip()
-        else:
-            title = ""
-            body = content.strip()
+        # 找首个非空行: 若是标题(含 # / 方括号 / 第X回 / 数字编号 / Chapter)则拆出, 否则视为无标题正文
+        title = ""
+        body = content.strip()
+        for idx, ln in enumerate(lines):
+            if not ln.strip():
+                continue
+            if looks_like_title(ln):
+                title = strip_title(ln)
+                body = "\n".join(lines[idx + 1:]).strip()
+            break
         manifest.append({
             "chapter_id": cid,
             "order": len(manifest) + 1,

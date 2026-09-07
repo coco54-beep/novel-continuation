@@ -76,7 +76,34 @@ def main():
         json.dump(data, f, ensure_ascii=False, indent=2)
 
     with open(os.path.join(out, "README.md"), "w", encoding="utf-8") as f:
-        f.write(f"# {data['title']}\n\n小说续写项目 `{name}`。\n")
+        f.write(
+            f"# {data['title']}\n\n"
+            f"小说续写项目 `{name}`。\n\n"
+            f"- 状态：`{data['status']}`\n"
+            f"- 原文章节：{data['original_chapter_count']}\n\n"
+            "结构：`source/`(原文) · `chapters/`(原文章节与续写版本) · "
+            "`analysis/`(逐章分析/风格指纹) · `story_bible/`(故事档案) · "
+            "`planning/`(结局方案与大纲) · `scenes/`(场景卡) · "
+            "`reviews/`(一致性报告) · `state/`(当前状态与快照) · "
+            "`indexes/`(索引) · `exports/`(导出成书)。\n"
+        )
+
+    # 状态基线: 初始 current_state(after_chapter=0000), 与 update_state.py 的基线约定一致
+    now = datetime.now().isoformat()
+    baseline = {
+        "state_id": "state_after_0000",
+        "after_chapter": "0000",
+        "characters": [],
+        "facts": [],
+        "conflicts": [],
+        "item_owners": [],
+        "foreshadowing_status": [],
+        "world_facts": [],
+        "_updated_at": now,
+    }
+    with open(os.path.join(out, "state", "current_state.json"), "w", encoding="utf-8") as f:
+        json.dump(baseline, f, ensure_ascii=False, indent=2)
+    open(os.path.join(out, "state", "snapshots", ".gitkeep"), "w", encoding="utf-8").close()
 
     # 初始状态目录占位
     print(f"项目创建成功: {out}")

@@ -239,13 +239,25 @@ python scripts/score_style.py --project ./projects/my_novel \
 
 产物：`reviews/{chapter_id}_v1.json`。
 
+**可选：把定量风格分并入审查报告**（语言风格一项的量化佐证，schema 已支持 `style_score` 字段）：
+```bash
+python scripts/attach_style_score.py --project ./projects/my_novel \
+  --review reviews/0013_v1.json --metrics reviews/style_metrics_0013.json
+python scripts/validate_json.py --schema schemas/review_report.schema.json --input reviews/0013_v1.json
+```
+
 ---
 
 ## 阶段十二：修订与确认
 
 根据审查报告创建 `chapters/generated/{chapter_id}/revised_v2.md`。修订要求：优先局部修改；不随意重写没问题的段落；不改变用户锁定内容；不引入新设定冲突；记录主要改动；严重问题再次检查。
 
-用户确认后保存 `final.md`。**只有 `final.md` 可以进入正式故事状态**。
+**复检门与确认**：修订后对严重问题复检；**最新一份 review_report 的 decision = approved（或用户 --force 强确认）后**，才允许生成 `final.md`：
+```bash
+python scripts/promote_chapter.py --project ./projects/my_novel --chapter 0013
+python scripts/promote_chapter.py --project ./projects/my_novel --chapter 0013 --force  # 用户强确认
+```
+`promote_chapter.py` 优先取 `revised_v2.md` → `revised_v1.md` → `draft_v1.md`，`final.md` 已存在时需 `--force` 才覆盖。**只有 `final.md` 可以进入正式故事状态**。
 
 ---
 
@@ -274,6 +286,25 @@ python scripts/update_state.py --project ./projects/my_novel --restore 0052
 ## 从已有项目继续
 
 先读取：`project.json`、`state/current_state.json`、`outlines/chapter_outlines.json`、最近一个正式章节、最近一个一致性报告，然后决定下一步。
+
+---
+
+## 诊断与维护命令（随时可跑）
+
+```bash
+# 项目进度 + 状态机下一步建议 + 一致性告警(schema_version/current_state↔story_bible 人物名)
+python scripts/project_status.py --project ./projects/my_novel
+
+# 手工增删 chapters/original/*.md 后重建章节清单(标题识别与 split_chapters 一致)
+python scripts/build_manifest.py --project ./projects/my_novel
+
+# 对比某章 draft/revised/final 版本差异(修订前后审阅)
+python scripts/compare_versions.py --project ./projects/my_novel --chapter 0013
+
+# 数组容器文件的逐元素 schema 校验(建档/大纲/场景卡/结局方案)
+python scripts/validate_json.py --schema schemas/character.schema.json \
+    --input projects/my_novel/story_bible/characters.json --items
+```
 
 ---
 

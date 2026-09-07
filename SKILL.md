@@ -107,7 +107,7 @@ projects/<project_id>/
 → 更新故事状态
 ```
 
-> **两种模式**：本技能提供**完整模式**（上图全套流程，适用长线/多章/多人物，需跨章一致性）与**轻量模式**（跳过建档/结局/章纲/场景卡，只读前文→抓风格→续写 1–2 章→快速自检，适用"就想快速续两章看看"或简单场景）。触发分支见 `prompts/light_continue.md` 的"何时用/何时不用"。默认为完整流程；若用户只要续一两章且无需长期一致性，走轻量模式。
+> **两种模式**：本技能提供**完整模式**（上图全套流程，适用长线/多章/多人物，需跨章一致性）与**轻量模式**（跳过建档/结局/章纲/场景卡，只读前文→抓风格→续写 1–2 章→快速自检，适用"就想快速续两章看看"或简单场景）。触发分支见 `prompts/light_continue.md` 的"何时用/何时不用"。**判定**：默认为完整流程；仅当「目标只 1–2 章 + 无需长期跨章一致性 + 用户不要结局/大纲」三者全满足才走轻量模式，否则走完整流程。
 
 > **篇幅由脚本自动探知、不由调用方手工决定。** 切分后运行 `scripts/estimate_chapter_length.py`，它统计原文章节真实字数并写入 `project.json#target_chapter_length`；后续所有场景卡/章纲/正文的 `target_chars` 均取自该值。写作以「剧情单元完整 + 符合作者叙事节奏」为第一原则，字数是结果而非目标。
 
@@ -134,7 +134,7 @@ projects/<project_id>/
 | 生成场景卡 | `prompts/generate_scene_cards.md` | `scenes/<id>.json` |
 | 生成正文 | `prompts/write_scene.md` | `chapters/generated/<id>/draft_v1.md` |
 | 一致性检查 | `prompts/review_chapter.md` | `reviews/<id>_v1.json` |
-| 修订确认 | `prompts/revise_chapter.md` | `revised_v2.md` / `final.md` |
+| 修订确认 | `prompts/revise_chapter.md` | `revised_v2.md` → `promote_chapter.py`(复检门, approved 才放行) → `final.md` |
 | 更新状态 | `scripts/update_state.py` | `state/current_state.json` + 快照 |
 
 ---
