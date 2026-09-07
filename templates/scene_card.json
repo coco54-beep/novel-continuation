@@ -1,0 +1,24 @@
+{
+  "scene_id": "scene_0051_01",
+  "chapter_id": "0051",
+  "scene_number": 1,
+  "time": "夜晚",
+  "place": "旧车站入口",
+  "pov_character": "林舟",
+  "characters": ["林舟", "周岚"],
+  "objective": "确认仓库是否有异常",
+  "per_character_goals": [
+    { "name": "林舟", "goal": "找到信物" },
+    { "name": "周岚", "goal": "确认是否有人跟踪" }
+  ],
+  "known_by_characters": ["林舟知道仓库编号"],
+  "unknown_by_characters": ["周岚不知信物来历"],
+  "misconceptions": ["林舟误以为是警方设局"],
+  "conflict": "是否进入有人的仓库",
+  "action": "林舟先行探查，周岚外围接应",
+  "emotion_changes": ["从警觉到紧张"],
+  "result": "发现信物并确认仓库编号正确",
+  "foreshadowing_to_advance": ["照片之谜"],
+  "next_scene_link": "下幕进入仓库内部",
+  "target_chars": 1200
+}

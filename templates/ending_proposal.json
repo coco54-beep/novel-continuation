@@ -1,0 +1,20 @@
+{
+  "proposal_id": "prop_001",
+  "name": "标准完结方案",
+  "type": "standard",
+  "suggested_remaining_chapters": 12,
+  "estimated_remaining_chars": 42000,
+  "summary": "完整解决主线冲突，处理重要支线，回收主要伏笔，给核心人物完整结局。",
+  "final_conflict": "与幕后势力的最终对决",
+  "main_character_ending": "主角达成目标并成长",
+  "other_character_endings": ["配角获得各自归宿"],
+  "main_plot_resolution": "真相大白，因果闭环",
+  "subplot_handling": "重要支线逐条收束",
+  "foreshadowing_plan": ["第1-3章回收A伏笔", "中段回收B伏笔", "末卷回收核心伏笔"],
+  "new_settings_needed": ["少量新地点"],
+  "source_support": ["(原文支撑点)"],
+  "inferred_parts": ["推断部分说明"],
+  "risk": "若加快可能牺牲支线完整度",
+  "match_score": 0.85,
+  "match_notes": "与前文主题高度契合"
+}

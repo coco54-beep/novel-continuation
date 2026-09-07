@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "project_id": "my_novel",
+  "title": "小说名称",
+  "source_type": "user_owned",
+  "status": "imported",
+  "original_chapter_count": 0,
+  "latest_confirmed_chapter": 0,
+  "target_chapter_length": 3500,
+  "continuation_preferences": {
+    "allow_new_characters": true,
+    "allow_new_world_rules": false,
+    "ending_tone": "由用户选择"
+  },
+  "created_at": "",
+  "updated_at": ""
+}

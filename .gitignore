@@ -1,0 +1,19 @@
+# 运行时产物(项目数据/书稿原文/续写/状态)一律不进仓库
+projects/
+*.log
+
+# Python 运行时
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 操作系统
+Thumbs.db
+.DS_Store

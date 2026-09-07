@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "chapter_outline.schema.json",
+  "title": "Chapter Outline",
+  "description": "单章大纲",
+  "type": "object",
+  "required": ["chapter_id", "chapter_number", "chapter_name", "goal", "characters",
+               "core_events", "foreshadowing_ops", "target_chars"],
+  "properties": {
+    "chapter_id": { "type": "string", "pattern": "^\\d{4}$" },
+    "chapter_number": { "type": "integer", "minimum": 1 },
+    "chapter_name": { "type": "string" },
+    "goal": { "type": "string" },
+    "characters": { "type": "array", "items": { "type": "string" } },
+    "time_place": { "type": "string" },
+    "core_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event", "cause", "result"],
+        "properties": {
+          "event": { "type": "string" },
+          "cause": { "type": "string" },
+          "result": { "type": "string" }
+        }
+      }
+    },
+    "character_mental_changes": { "type": "array", "items": { "type": "string" } },
+    "relationship_changes": { "type": "array", "items": { "type": "string" } },
+    "information_delta": { "type": "array", "items": { "type": "string" } },
+    "foreshadowing_ops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "foreshadowing_id": { "type": "string" },
+          "op": { "type": "string", "enum": ["plant", "reinforce", "resolve", "misdirect"] }
+        }
+      }
+    },
+    "environment_features": { "type": "string" },
+    "language_pacing": { "type": "string" },
+    "hook": { "type": "string" },
+    "target_chars": { "type": "integer", "minimum": 1 },
+    "volume_number": { "type": "integer", "minimum": 0 }
+  }
+}

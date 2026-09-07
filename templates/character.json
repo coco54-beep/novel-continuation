@@ -1,0 +1,33 @@
+{
+  "character_id": "char_lin_zhou",
+  "name": "林舟",
+  "aliases": ["小舟", "林先生"],
+  "source_status": "confirmed",
+  "identity": "调查员",
+  "appearance": ["年轻，衣着普通"],
+  "values": ["守护同伴", "查明真相"],
+  "desires": ["找到失踪者"],
+  "fears": ["重蹈父辈覆辙"],
+  "strengths": ["观察力强", "冷静"],
+  "weaknesses": ["过度克制"],
+  "behavior_profile": {
+    "decision_style": "先观察再行动",
+    "risk_preference": "中等",
+    "under_pressure": "沉默并快速分析",
+    "will_not_do": ["在无充分动机时抛弃同伴"]
+  },
+  "speech_profile": {
+    "formality": "中等",
+    "sentence_length": "短句为主",
+    "features": ["少用感叹句", "常用反问试探"],
+    "catchphrases": [],
+    "forbidden_phrases": []
+  },
+  "current_state": {
+    "location": "旧车站",
+    "goal": "寻找失踪者",
+    "emotion": "焦虑",
+    "physical_condition": "轻伤"
+  },
+  "evidence": ["(引用原文段落摘要)"]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "knowledge.schema.json",
+  "title": "Knowledge",
+  "description": "一条故事内的事实/信息及其在各人物间的知情状态",
+  "type": "object",
+  "required": ["fact_id", "content", "truth_status", "known_by", "unknown_by", "source_chapter"],
+  "properties": {
+    "fact_id": { "type": "string", "pattern": "^fact_" },
+    "content": { "type": "string" },
+    "truth_status": {
+      "type": "string",
+      "enum": ["confirmed", "strong_implied", "inferred", "creative", "user_confirmed"]
+    },
+    "known_by": { "type": "array", "items": { "type": "string" } },
+    "unknown_by": { "type": "array", "items": { "type": "string" } },
+    "misunderstood_by": { "type": "array", "items": { "type": "string" } },
+    "source_chapter": { "type": "string", "pattern": "^\\d{4}$" },
+    "is_secret": { "type": "boolean" },
+    "notes": { "type": "string" }
+  }
+}

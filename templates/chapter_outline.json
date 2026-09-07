@@ -1,0 +1,26 @@
+{
+  "chapter_id": "0051",
+  "chapter_number": 51,
+  "chapter_name": "旧车站的信",
+  "goal": "推进线索并铺垫冲突",
+  "characters": ["林舟", "周岚"],
+  "time_place": "夜晚 / 旧车站",
+  "core_events": [
+    {
+      "event": "主角在旧车站发现信物",
+      "cause": "跟随上一章线索",
+      "result": "确认仓库地点"
+    }
+  ],
+  "character_mental_changes": ["林舟从迟疑转为决心"],
+  "relationship_changes": ["与周岚合作加深"],
+  "information_delta": ["获知仓库编号"],
+  "foreshadowing_ops": [
+    { "foreshadowing_id": "foreshadow_0003", "op": "reinforce" }
+  ],
+  "environment_features": "清冷的雨夜，湿漉漉的石阶",
+  "language_pacing": "短句，紧张感渐强",
+  "hook": "来信署名竟是失踪者本人",
+  "target_chars": 3500,
+  "volume_number": 1
+}

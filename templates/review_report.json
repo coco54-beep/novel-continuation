@@ -1,0 +1,18 @@
+{
+  "chapter_id": "0051",
+  "version": "draft_v1",
+  "overall_score": 82,
+  "decision": "revision_required",
+  "issues": [
+    {
+      "issue_id": "issue_001",
+      "type": "knowledge_boundary",
+      "severity": "high",
+      "location": "第14段",
+      "description": "林舟提到了他尚未获得的仓库编号。",
+      "evidence": ["fact_0012"],
+      "suggestion": "删除具体编号，或补充合理的信息获得过程。",
+      "status": "open"
+    }
+  ]
+}

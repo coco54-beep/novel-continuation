@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "scene_card.schema.json",
+  "title": "Scene Card",
+  "description": "一个场景的场景卡",
+  "type": "object",
+  "required": ["scene_id", "chapter_id", "scene_number", "time", "place", "pov_character",
+               "characters", "objective", "conflict", "action", "result", "target_chars"],
+  "properties": {
+    "scene_id": { "type": "string", "pattern": "^scene_" },
+    "chapter_id": { "type": "string", "pattern": "^\\d{4}$" },
+    "scene_number": { "type": "integer", "minimum": 1 },
+    "time": { "type": "string" },
+    "place": { "type": "string" },
+    "pov_character": { "type": "string" },
+    "characters": { "type": "array", "items": { "type": "string" } },
+    "objective": { "type": "string" },
+    "per_character_goals": {
+      "type": "array",
+      "items": { "type": "object", "properties": { "name": { "type": "string" }, "goal": { "type": "string" } } }
+    },
+    "known_by_characters": { "type": "array", "items": { "type": "string" } },
+    "unknown_by_characters": { "type": "array", "items": { "type": "string" } },
+    "misconceptions": { "type": "array", "items": { "type": "string" } },
+    "conflict": { "type": "string" },
+    "action": { "type": "string" },
+    "emotion_changes": { "type": "array", "items": { "type": "string" } },
+    "result": { "type": "string" },
+    "foreshadowing_to_advance": { "type": "array", "items": { "type": "string" } },
+    "next_scene_link": { "type": "string" },
+    "target_chars": { "type": "integer", "minimum": 1 }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "style_profile.schema.json",
+  "title": "StyleProfile",
+  "description": "全书风格指纹: 抽象可量化特征 + 叙事范式 + 具体抓手(决定'像不像'的关键) + 高频踩坑点",
+  "type": "object",
+  "required": [
+    "schema_version", "project_id", "paradigm", "density_tier",
+    "perspective", "voice", "sentence_rhythm",
+    "emotion_presentation", "dialogue_ratio", "description_style",
+    "cultural_references", "material_details", "catchphrases", "pitfalls"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0" },
+    "project_id": { "type": "string", "pattern": "^[A-Za-z0-9_\\-]+$" },
+    "paradigm": {
+      "type": "string",
+      "description": "所属文风范式, 对应 references/style_library.md 的 A~M 之一, 如 '章回武侠/史诗全景/克制极简白描'",
+      "examples": [
+        "史诗全景 / 乡土家族", "章回说书体", "章回武侠", "现实厚重 / 时代与土地",
+        "克制极简白描", "诗意抒情 / 田园", "悬疑惊悚 / 第一人称", "黑道纪实 / 编年",
+        "暖心随笔 / 人故事", "古风玄幻 / 网络文", "半文半白言情穿越", "古典雅致 / 家族兴衰",
+        "硬科幻 / 冷静工程师式"
+      ]
+    },
+    "density_tier": { "type": "string", "enum": ["密实", "中等", "疏朗"], "description": "取自 project.json#density_tier(scripts/analyze_density.py 探知)" },
+    "perspective": { "type": "string", "description": "叙事人称与视角范围, 如 '第三人称限知/第一人称全知/全知'" },
+    "voice": { "type": "string", "description": "叙述语调/句式特征: 文白夹杂/口语化/冷峻工程师式/诗性/凝练白描" },
+    "sentence_rhythm": { "type": "string", "description": "句长节奏与长短句分布, 如 '短句为主、多断句/长句舒展慢节奏'" },
+    "emotion_presentation": { "type": "string", "description": "情绪呈现方式, 遵循 style_rules.md: 用事件承载不用形容词、保留冷场、给结果即收" },
+    "dialogue_ratio": { "type": "string", "description": "对白占比概括, 如 '对白密集, 言语机锋/白描为主, 对白克制'" },
+    "description_style": { "type": "string", "description": "环境/动作/心理描写偏好, 如 '白描叠字、物我交融/工笔打斗铺陈/科普式转译'" },
+    "cultural_references": {
+      "type": "array", "items": { "type": "string" },
+      "description": "文化/亚文化梗的具体符号清单(如游戏/动漫/电影/网络文化), 续写必须沿用原文符号体系"
+    },
+    "material_details": {
+      "type": "array", "items": { "type": "string" },
+      "description": "生活细节质感清单: 品牌/道具/绰号/生活习惯/口头禅式实感"
+    },
+    "catchphrases": {
+      "type": "array", "items": { "type": "string" },
+      "description": "角色口头禅/固定句法/对白腔调, 按角色可分组记录"
+    },
+    "pitfalls": {
+      "type": "array", "items": { "type": "string" },
+      "description": "该范式高频踩坑点(见 style_library.md), 续写红线, 逐条规避"
+    },
+    "style_metrics": {
+      "type": ["object", "null"],
+      "description": "可量化指标(由 scripts/build_style_profile.py 自动填充), 可直接对应的 abstract 特征",
+      "properties": {
+        "target_chapter_length": { "type": ["integer", "null"] },
+        "mean_sentence_len": { "type": ["number", "null"] },
+        "short_sentence_ratio": { "type": ["number", "null"] },
+        "dialogue_ratio_metric": { "type": ["number", "null"] },
+        "para_per_1k": { "type": ["number", "null"] }
+      }
+    },
+    "notes": { "type": ["string", "null"], "description": "补充说明/特殊情况" }
+  }
+}

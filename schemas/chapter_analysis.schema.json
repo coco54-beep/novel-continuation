@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "chapter_analysis.schema.json",
+  "title": "Chapter Analysis",
+  "description": "单章结构化分析结果",
+  "type": "object",
+  "required": ["chapter_id", "order", "title", "summary", "narrative_function",
+               "events", "characters", "style", "foreshadowing", "confidence"],
+  "properties": {
+    "chapter_id": { "type": "string", "pattern": "^\\d{4}$" },
+    "order": { "type": "integer", "minimum": 1 },
+    "title": { "type": "string" },
+    "one_line_summary": { "type": "string" },
+    "summary": { "type": "string", "description": "详细剧情梗概" },
+    "narrative_function": { "type": "string" },
+    "time_place": { "type": "string" },
+    "point_of_view": { "type": "string" },
+    "characters": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/chapter_character" }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event", "cause", "immediate_result", "long_term_impact"],
+        "properties": {
+          "event": { "type": "string" },
+          "cause": { "type": "string" },
+          "immediate_result": { "type": "string" },
+          "long_term_impact": { "type": "string" }
+        }
+      }
+    },
+    "information": {
+      "type": "object",
+      "properties": {
+        "learned": { "type": "array", "items": { "type": "string" } },
+        "misconceptions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "environment_description": { "type": "string" },
+        "language_features": { "type": "string" },
+        "emotion_curve": { "type": "string" },
+        "pacing": { "type": "string" },
+        "hook": { "type": "string" }
+      }
+    },
+    "foreshadowing": {
+      "type": "object",
+      "properties": {
+        "new": { "type": "array", "items": { "type": "string" } },
+        "reinforced": { "type": "array", "items": { "type": "string" } },
+        "resolved": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+  },
+  "$defs": {
+    "chapter_character": {
+      "type": "object",
+      "required": ["name", "goal", "mental_state", "behavior"],
+      "properties": {
+        "name": { "type": "string" },
+        "goal": { "type": "string" },
+        "mental_state": { "type": "string" },
+        "behavior": { "type": "string" },
+        "state_change": { "type": "string" }
+      }
+    }
+  }
+}

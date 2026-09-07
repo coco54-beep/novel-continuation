@@ -1,0 +1,33 @@
+{
+  "state_id": "state_after_0051",
+  "after_chapter": "0051",
+  "characters": [
+    {
+      "name": "林舟",
+      "location": "旧车站仓库",
+      "physical_condition": "轻伤",
+      "mental_state": "坚定",
+      "current_goal": "追查失踪者下落",
+      "known_information": ["仓库编号为17", "信件来自失踪者"],
+      "misconceptions": ["误以为信件是警方设局"]
+    },
+    {
+      "name": "周岚",
+      "location": "旧车站外围",
+      "physical_condition": "无恙",
+      "mental_state": "警惕",
+      "current_goal": "确认无人跟踪",
+      "known_information": ["失踪者行踪不明"],
+      "misconceptions": []
+    }
+  ],
+  "facts": ["失踪者曾出现在仓库附近"],
+  "conflicts": ["幕后势力尚未现形"],
+  "item_owners": [
+    { "item": "匿名信", "owner": "林舟" }
+  ],
+  "foreshadowing_status": [
+    { "id": "foreshadow_0003", "status": "reinforced" }
+  ],
+  "world_facts": []
+}

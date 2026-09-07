@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ending_proposal.schema.json",
+  "title": "Ending Proposal",
+  "description": "一个结局方案",
+  "type": "object",
+  "required": ["proposal_id", "name", "type", "suggested_remaining_chapters",
+               "estimated_remaining_chars", "summary", "final_conflict", "main_character_ending",
+               "risk", "match_score"],
+  "properties": {
+    "proposal_id": { "type": "string", "pattern": "^prop_" },
+    "name": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["quick", "standard", "expanded"]
+    },
+    "suggested_remaining_chapters": { "type": "integer", "minimum": 1 },
+    "estimated_remaining_chars": { "type": "integer", "minimum": 1 },
+    "summary": { "type": "string", "description": "结局概述" },
+    "final_conflict": { "type": "string" },
+    "main_character_ending": { "type": "string" },
+    "other_character_endings": { "type": "array", "items": { "type": "string" } },
+    "main_plot_resolution": { "type": "string" },
+    "subplot_handling": { "type": "string" },
+    "foreshadowing_plan": { "type": "array", "items": { "type": "string" } },
+    "new_settings_needed": { "type": "array", "items": { "type": "string" } },
+    "source_support": { "type": "array", "items": { "type": "string" } },
+    "inferred_parts": { "type": "array", "items": { "type": "string" } },
+    "risk": { "type": "string" },
+    "match_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "match_notes": { "type": "string" }
+  }
+}

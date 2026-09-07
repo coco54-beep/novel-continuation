@@ -1,0 +1,11 @@
+{
+  "core_theme": "主角在追寻真相中重新理解责任与牺牲",
+  "ending": "真相大白并给出积极收束",
+  "ending_proposal_id": "prop_001",
+  "remaining_main_plot": ["寻访知情者", "揭开幕后势力", "化解最终危机"],
+  "character_arcs": ["主角从逃避到承担", "同伴放下心结"],
+  "final_conflict": "与幕后势力的对峙",
+  "foreshadowing_order": ["照片之谜", "失踪者去向", "父辈旧案"],
+  "turning_points": ["第1章末发现关键线索", "第7章目睹背叛", "第11章真相反转"],
+  "volume_count": 2
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "character.schema.json",
+  "title": "Character",
+  "description": "人物档案",
+  "type": "object",
+  "required": ["character_id", "name", "source_status", "identity", "behavior_profile",
+               "speech_profile", "current_state"],
+  "properties": {
+    "character_id": { "type": "string", "pattern": "^char_" },
+    "name": { "type": "string" },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "source_status": {
+      "type": "string",
+      "enum": ["confirmed", "strong_implied", "inferred", "creative", "user_confirmed", "rejected"]
+    },
+    "identity": { "type": "string" },
+    "appearance": { "type": "array", "items": { "type": "string" } },
+    "values": { "type": "array", "items": { "type": "string" } },
+    "desires": { "type": "array", "items": { "type": "string" } },
+    "fears": { "type": "array", "items": { "type": "string" } },
+    "strengths": { "type": "array", "items": { "type": "string" } },
+    "weaknesses": { "type": "array", "items": { "type": "string" } },
+    "behavior_profile": {
+      "type": "object",
+      "properties": {
+        "decision_style": { "type": "string" },
+        "risk_preference": { "type": "string" },
+        "under_pressure": { "type": "string" },
+        "will_not_do": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "speech_profile": {
+      "type": "object",
+      "properties": {
+        "formality": { "type": "string" },
+        "sentence_length": { "type": "string" },
+        "features": { "type": "array", "items": { "type": "string" } },
+        "catchphrases": { "type": "array", "items": { "type": "string" } },
+        "forbidden_phrases": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "current_state": {
+      "type": "object",
+      "properties": {
+        "location": { "type": "string" },
+        "goal": { "type": "string" },
+        "emotion": { "type": "string" },
+        "physical_condition": { "type": "string" }
+      }
+    },
+    "evidence": { "type": "array", "items": { "type": "string" } }
+  }
+}

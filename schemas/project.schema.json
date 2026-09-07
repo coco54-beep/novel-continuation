@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project.schema.json",
+  "title": "Project",
+  "description": "小说项目元数据与当前状态",
+  "type": "object",
+  "required": ["schema_version", "project_id", "title", "source_type", "status",
+               "original_chapter_count", "latest_confirmed_chapter", "target_chapter_length"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0" },
+    "project_id": { "type": "string", "pattern": "^[A-Za-z0-9_\\-]+$" },
+    "title": { "type": "string" },
+    "source_type": {
+      "type": "string",
+      "enum": ["user_owned", "licensed", "public_domain", "research", "ai_generated"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["created", "imported", "split", "analyzing", "analyzed",
+               "planning", "planned", "writing", "reviewing", "completed"]
+    },
+    "original_chapter_count": { "type": "integer", "minimum": 0 },
+    "latest_confirmed_chapter": { "type": "integer", "minimum": 0 },
+    "target_chapter_length": { "type": "integer", "minimum": 1 },
+    "continuation_preferences": {
+      "type": ["object", "null"],
+      "properties": {
+        "allow_new_characters": { "type": "boolean" },
+        "allow_new_world_rules": { "type": "boolean" },
+        "ending_tone": { "type": "string" }
+      }
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "chapter_id": "0001",
+  "order": 1,
+  "title": "第一章 雨夜",
+  "one_line_summary": "主角在雨夜获知身世线索。",
+  "summary": "简述本章主要经过：主角身处何处、与谁相遇、发生了关键转折。",
+  "narrative_function": "开端 / 铺垫 / 转折 / 收束(择一)",
+  "time_place": "雨夜 / 旧车站",
+  "point_of_view": "第三人称限知(以主角视角)",
+  "characters": [
+    {
+      "name": "林舟",
+      "goal": "寻找失踪者",
+      "mental_state": "焦虑而冷静",
+      "behavior": "沉默观察后再行动",
+      "state_change": "获知线索后目标更明确"
+    }
+  ],
+  "events": [
+    {
+      "event": "主角收到匿名信件",
+      "cause": "延续上一章跟踪线索",
+      "immediate_result": "主角前往旧车站",
+      "long_term_impact": "引出下一步寻找目标"
+    }
+  ],
+  "information": {
+    "learned": ["仓库编号为17"],
+    "misconceptions": ["误以为信件来自警方"]
+  },
+  "style": {
+    "environment_description": "清冷、潮湿、意象化的雨夜",
+    "language_features": "短句为主，少感叹句",
+    "emotion_curve": "平静→紧张",
+    "pacing": "缓慢推进",
+    "hook": "信中夹着一张陌生人的照片"
+  },
+  "foreshadowing": {
+    "new": ["照片上的第三个人"],
+    "reinforced": [],
+    "resolved": []
+  },
+  "evidence": ["(引用原文关键句)"],
+  "confidence": 0.9
+}
